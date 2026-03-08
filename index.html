@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صرافہ وزن پرچی (بہتر ترتیب)</title>
+    <style>
+        /* عمومی اسٹائل (اسکرین کے لیے) */
+        body {
+            font-family: 'Noto Naskh Arabic', 'Jameel Noori Nastaleeq', 'Urdu Typesetting', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecf2 100%);
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid #d0d9e0;
+        }
+        h2 {
+            text-align: center;
+            color: #1e3c5c;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #c9a959;
+            padding-bottom: 8px;
+            font-size: 26px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 6px 0 2px;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #b0c4de;
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: inherit;
+            direction: ltr;
+            text-align: left;
+            background: #fefefe;
+            transition: all 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: #c9a959;
+            box-shadow: 0 0 5px rgba(201,169,89,0.3);
+            outline: none;
+        }
+        .row {
+            display: flex;
+            gap: 8px; /* فاصلہ کم کیا */
+            flex-wrap: wrap;
+        }
+        .row > div {
+            flex: 1;
+            min-width: 70px;
+        }
+        button {
+            background: #1e3c5c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 12px;
+            transition: background 0.3s, transform 0.1s;
+            font-size: 17px;
+            letter-spacing: 1px;
+        }
+        button:hover {
+            background: #2a4e72;
+            transform: scale(1.02);
+        }
+        .readonly-item {
+            background: #edf2f7;
+            padding: 8px 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid #cbd5e0;
+            color: #1e3c5c;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .hidden {
+            display: none;
+        }
+        #customCategoryDiv {
+            margin-top: 5px;
+            background: #f8f4e8;
+            padding: 8px;
+            border-radius: 6px;
+            border-right: 3px solid #c9a959;
+        }
+        .preview-receipt {
+            margin-top: 20px;
+            border: 2px dashed #c9a959;
+            padding: 12px;
+            background: #fefcf6;
+            font-size: 14px;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .preview-receipt h4 {
+            color: #1e3c5c;
+            margin-top: 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #c9a959;
+            padding-bottom: 5px;
+        }
+
+        /* پرنٹ اسٹائل – انتہائی خوبصورت */
+        .printable {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0.3in;
+            }
+            body * {
+                visibility: hidden;
+            }
+            .printable, .printable * {
+                visibility: visible;
+            }
+            .printable {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #f3efe5;
+                margin: 0;
+                padding: 0;
+            }
+            .receipt-container {
+                display: flex;
+                flex-wrap: nowrap;
+                width: 100%;
+                gap: 12px;
+                justify-content: center;
+                align-items: stretch;
+                padding: 5px;
+            }
+            .receipt {
+                width: calc(50% - 10px);
+                max-width: 48%;
+                background: white;
+                border: 2px solid #1e3c5c;
+                border-radius: 25px;
+                padding: 18px 15px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                page-break-inside: avoid;
+                font-size: 14pt;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+                background: linear-gradient(145deg, #ffffff 0%, #fcf9f2 100%);
+                position: relative;
+                overflow: hidden;
+            }
+            .receipt::before {
+                content: "";
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                width: 80px;
+                height: 80px;
+                background: rgba(201,169,89,0.1);
+                border-radius: 50%;
+                z-index: 0;
+            }
+            .receipt h3 {
+                text-align: center;
+                margin: 5px 0 10px;
+                color: #1e3c5c;
+                font-size: 26pt;
+                border-bottom: 4px double #c9a959;
+                padding-bottom: 8px;
+                font-weight: 800;
+                letter-spacing: 2px;
+                position: relative;
+                z-index: 1;
+            }
+            .shop-info {
+                text-align: center;
+                font-size: 18pt;
+                font-weight: bold;
+                color: #2a4e72;
+                margin: 5px 0 10px;
+                background: #e9e2d0;
+                padding: 8px;
+                border-radius: 40px;
+                border: 1px solid #c9a959;
+                position: relative;
+                z-index: 1;
+            }
+            .receipt table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 10px 0;
+                font-size: 15pt;
+                background: rgba(255,255,255,0.7);
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                position: relative;
+                z-index: 1;
+            }
+            .receipt td {
+                padding: 8px 6px;
+                border: 1px solid #d1b48c;
+            }
+            .receipt td.label {
+                font-weight: bold;
+                width: 40%;
+                background: #e9e2d0;
+                color: #1e3c5c;
+            }
+            .receipt .footer {
+                text-align: center;
+                margin-top: 12px;
+                font-size: 18pt;
+                font-weight: bold;
+                color: #1e3c5c;
+                border-top: 3px wavy #c9a959;
+                padding-top: 8px;
+                font-family: 'Jameel Noori Nastaleeq', 'Urdu Typesetting', sans-serif;
+                position: relative;
+                z-index: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>⚖️ صرافہ وزن پرچی (بہتر ترتیب)</h2>
+
+        <!-- دکان دار کا نام و پتہ -->
+        <div style="margin-bottom:15px; background:#fcf8e7; padding:10px; border-radius:10px; border:1px solid #c9a959;">
+            <label>دکان دار کا نام</label>
+            <input type="text" id="shopName" value="کنڈا پرچی" placeholder="نام">
+            <label>پتہ</label>
+            <input type="text" id="shopAddress" value="گلی شہیداں صرافہ بازار ملتان" placeholder="پتہ">
+        </div>
+
+        <!-- زمرہ + دستی نام -->
+        <div>
+            <label>زمرہ</label>
+            <select id="category" onchange="toggleCustomCategory()">
+                <option value="سونا">سونا</option>
+                <option value="چاندی">چاندی</option>
+                <option value="انگوٹھی">انگوٹھی</option>
+                <option value="سیٹ">سیٹ</option>
+                <option value="زیور">زیور</option>
+                <option value="custom">دستی (کوئی بھی نام)</option>
+            </select>
+        </div>
+
+        <!-- خانہ برائے دستی نام -->
+        <div id="customCategoryDiv" class="hidden">
+            <label>دستی نام لکھیں (مثلاً: زیرو، پرانا وغیرہ)</label>
+            <input type="text" id="customCategory" placeholder="یہاں لکھیں" oninput="calculateNet()">
+        </div>
+
+        <!-- کل وزن: گرام + تولہ/ماشہ/رتی -->
+        <label>کل وزن (گرام میں)</label>
+        <input type="number" id="gramsInput" step="any" value="0" min="0" placeholder="مثلاً 11.66" oninput="updateFromGrams()">
+
+        <label>کل وزن (تولہ، ماشہ، رتی) — رتی اعشاریہ</label>
+        <div class="row">
+            <div><input type="number" id="wtTola" step="any" value="0" min="0" placeholder="تولہ" oninput="updateFromTMR()"></div>
+            <div><input type="number" id="wtMasha" step="any" value="0" min="0" placeholder="ماشہ" oninput="updateFromTMR()"></div>
+            <div><input type="number" id="wtRatti" step="any" value="0" min="0" placeholder="رتی" oninput="updateFromTMR()"></div>
+        </div>
+
+        <!-- کٹوتی کی قسم -->
+        <label>کٹوتی کی قسم (تناسب)</label>
+        <select id="rateType" onchange="calculateNet()">
+            <option value="rattiPerMasha">🔹 رتی فی ماشہ</option>
+            <option value="rattiPerTola">🔸 رتی فی تولہ</option>
+            <option value="mashaPerTola">🔸 ماشہ فی تولہ</option>
+            <option value="tolaPer100Tola">🔹 تولہ فی 100 تولہ</option>
+        </select>
+
+        <label>مقدار (مثلاً 1، 2، 0.5)</label>
+        <input type="number" id="rateAmount" step="any" value="1" min="0" oninput="calculateNet()">
+
+        <!-- کل کٹوتی (خودکار) -->
+        <label>کُل کٹوتی</label>
+        <div class="readonly-item" id="totalCutDisplay">0 تولہ 0 ماشہ 0.00 رتی (0.00 گرام)</div>
+
+        <!-- خالص وزن (خودکار) -->
+        <label>خالص وزن</label>
+        <div class="readonly-item" id="netDisplay">0 تولہ 0 ماشہ 0.00 رتی (0.00 گرام)</div>
+
+        <!-- فی تولہ ریٹ -->
+        <label>فی تولہ ریٹ (روپے)</label>
+        <input type="number" id="ratePerTola" step="any" value="0" min="0" placeholder="مثلاً 120000" oninput="calculateNet()">
+
+        <!-- کل قیمت -->
+        <label>کل قیمت (روپے)</label>
+        <div class="readonly-item" id="totalPriceDisplay">0.00</div>
+
+        <!-- پرنٹ بٹن -->
+        <button onclick="printReceipt()">🖨️ خوبصورت پرنٹ کریں (دو پرچیاں)</button>
+
+        <!-- پیش منظر -->
+        <div class="preview-receipt" id="preview">
+            <h4>پیش منظر (پرنٹ کی جھلک)</h4>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+
+    <!-- پرنٹ ایبل ایریا -->
+    <div class="printable" id="printableArea">
+        <div class="receipt-container" id="receiptContainer"></div>
+    </div>
+
+    <script>
+        // Constants
+        const GRAM_PER_RATTI = 0.1215;
+        const GRAM_PER_MASHA = 0.972;      // 8 ratti
+        const GRAM_PER_TOLA  = 11.6638;     // 96 ratti
+
+        let isUpdating = false;
+
+        // Convert Tola, Masha, Ratti to total ratti
+        function tmrToRatti(tola, masha, ratti) {
+            return (tola * 96) + (masha * 8) + ratti;
+        }
+
+        // Convert total ratti to Tola, Masha, Ratti (with fractional ratti)
+        function rattiToTMR(ratti) {
+            const tola = Math.floor(ratti / 96);
+            let rem = ratti % 96;
+            const masha = Math.floor(rem / 8);
+            const rattifrac = rem % 8;
+            return { tola, masha, ratti: rattifrac };
+        }
+
+        // Convert total ratti to decimal Tola
+        function rattiToDecimalTola(ratti) {
+            return ratti / 96;
+        }
+
+        // Show/hide custom category field
+        window.toggleCustomCategory = function() {
+            const cat = document.getElementById('category').value;
+            const div = document.getElementById('customCategoryDiv');
+            if (cat === 'custom') {
+                div.classList.remove('hidden');
+            } else {
+                div.classList.add('hidden');
+            }
+            calculateNet();
+        };
+
+        // Get current category name for display
+        function getCurrentCategory() {
+            const cat = document.getElementById('category').value;
+            if (cat === 'custom') {
+                const custom = document.getElementById('customCategory').value.trim();
+                return custom || 'دستی';
+            }
+            return cat;
+        }
+
+        // Update from grams
+        window.updateFromGrams = function() {
+            if (isUpdating) return;
+            isUpdating = true;
+
+            const grams = parseFloat(document.getElementById('gramsInput').value) || 0;
+            const totalRatti = grams / GRAM_PER_RATTI;
+            const tmr = rattiToTMR(totalRatti);
+
+            document.getElementById('wtTola').value = tmr.tola;
+            document.getElementById('wtMasha').value = tmr.masha;
+            document.getElementById('wtRatti').value = tmr.ratti.toFixed(2);
+
+            isUpdating = false;
+            calculateNet();
+        };
+
+        // Update from TMR
+        window.updateFromTMR = function() {
+            if (isUpdating) return;
+            isUpdating = true;
+
+            const tola = parseFloat(document.getElementById('wtTola').value) || 0;
+            const masha = parseFloat(document.getElementById('wtMasha').value) || 0;
+            const ratti = parseFloat(document.getElementById('wtRatti').value) || 0;
+
+            const totalRatti = tmrToRatti(tola, masha, ratti);
+            const grams = totalRatti * GRAM_PER_RATTI;
+
+            document.getElementById('gramsInput').value = grams.toFixed(2);
+
+            isUpdating = false;
+            calculateNet();
+        };
+
+        // Calculate net weight, cut, and total price
+        window.calculateNet = function() {
+            const wtT = parseFloat(document.getElementById('wtTola').value) || 0;
+            const wtM = parseFloat(document.getElementById('wtMasha').value) || 0;
+            const wtR = parseFloat(document.getElementById('wtRatti').value) || 0;
+            const grossRatti = tmrToRatti(wtT, wtM, wtR);
+
+            const rateType = document.getElementById('rateType').value;
+            const amount = parseFloat(document.getElementById('rateAmount').value) || 0;
+
+            let subtractRatti = 0;
+            if (rateType === 'rattiPerMasha') {
+                const totalMasha = grossRatti / 8;
+                subtractRatti = amount * totalMasha;
+            } else if (rateType === 'rattiPerTola') {
+                const totalTola = grossRatti / 96;
+                subtractRatti = amount * totalTola;
+            } else if (rateType === 'mashaPerTola') {
+                const totalTola = grossRatti / 96;
+                const subtractMasha = amount * totalTola;
+                subtractRatti = subtractMasha * 8;
+            } else if (rateType === 'tolaPer100Tola') {
+                const totalTola = grossRatti / 96;
+                const subtractTola = (amount / 100) * totalTola;
+                subtractRatti = subtractTola * 96;
+            }
+
+            const netRatti = grossRatti - subtractRatti;
+
+            // Display total cut
+            const cutTMR = rattiToTMR(subtractRatti);
+            const cutGrams = subtractRatti * GRAM_PER_RATTI;
+            document.getElementById('totalCutDisplay').innerText = 
+                `${cutTMR.tola} تولہ ${cutTMR.masha} ماشہ ${cutTMR.ratti.toFixed(2)} رتی (${cutGrams.toFixed(2)} گرام)`;
+
+            // Display net weight
+            const netTMR = rattiToTMR(netRatti);
+            const netGrams = netRatti * GRAM_PER_RATTI;
+            document.getElementById('netDisplay').innerText = 
+                `${netTMR.tola} تولہ ${netTMR.masha} ماشہ ${netTMR.ratti.toFixed(2)} رتی (${netGrams.toFixed(2)} گرام)`;
+
+            // Total price
+            const netTolaDecimal = rattiToDecimalTola(netRatti);
+            const ratePerTola = parseFloat(document.getElementById('ratePerTola').value) || 0;
+            const totalPrice = netTolaDecimal * ratePerTola;
+            document.getElementById('totalPriceDisplay').innerText = totalPrice.toFixed(2);
+
+            // Update preview
+            updatePreview();
+        };
+
+        // Update preview
+        function updatePreview() {
+            const categoryDisplay = getCurrentCategory();
+            const wtT = document.getElementById('wtTola').value || '0';
+            const wtM = document.getElementById('wtMasha').value || '0';
+            const wtR = document.getElementById('wtRatti').value || '0';
+            const grams = document.getElementById('gramsInput').value || '0';
+            const rateType = document.getElementById('rateType').value;
+            const rateAmount = document.getElementById('rateAmount').value || '0';
+            const ratePerTola = document.getElementById('ratePerTola').value || '0';
+            const totalCut = document.getElementById('totalCutDisplay').innerText;
+            const netDisplay = document.getElementById('netDisplay').innerText;
+            const totalPrice = document.getElementById('totalPriceDisplay').innerText;
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ur-PK') + ' ' + now.toLocaleTimeString('ur-PK');
+
+            let subDesc = '';
+            switch (rateType) {
+                case 'rattiPerMasha': subDesc = `${rateAmount} رتی فی ماشہ`; break;
+                case 'rattiPerTola': subDesc = `${rateAmount} رتی فی تولہ`; break;
+                case 'mashaPerTola': subDesc = `${rateAmount} ماشہ فی تولہ`; break;
+                case 'tolaPer100Tola': subDesc = `${rateAmount} تولہ فی 100 تولہ`; break;
+            }
+
+            document.getElementById('previewContent').innerHTML = `
+                <table style="width:100%; border-collapse:collapse; direction:rtl;">
+                    <tr><td class="label">زمرہ</td><td>${categoryDisplay}</td></tr>
+                    <tr><td class="label">کل وزن</td><td>${wtT} تولہ ${wtM} ماشہ ${wtR} رتی (${grams} گرام)</td></tr>
+                    <tr><td class="label">کٹوتی کی قسم</td><td>${subDesc}</td></tr>
+                    <tr><td class="label">کُل کٹوتی</td><td>${totalCut}</td></tr>
+                    <tr><td class="label">خالص وزن</td><td>${netDisplay}</td></tr>
+                    <tr><td class="label">فی تولہ ریٹ</td><td>${ratePerTola} روپے</td></tr>
+                    <tr><td class="label">کل قیمت</td><td>${totalPrice} روپے</td></tr>
+                    <tr><td class="label">تاریخ/وقت</td><td>${dateStr}</td></tr>
+                </table>
+            `;
+        }
+
+        // Prepare printable receipts (two copies)
+        function preparePrintable() {
+            const categoryDisplay = getCurrentCategory();
+            const wtT = document.getElementById('wtTola').value || '0';
+            const wtM = document.getElementById('wtMasha').value || '0';
+            const wtR = document.getElementById('wtRatti').value || '0';
+            const grams = document.getElementById('gramsInput').value || '0';
+            const rateType = document.getElementById('rateType').value;
+            const rateAmount = document.getElementById('rateAmount').value || '0';
+            const ratePerTola = document.getElementById('ratePerTola').value || '0';
+            const totalCut = document.getElementById('totalCutDisplay').innerText;
+            const netDisplay = document.getElementById('netDisplay').innerText;
+            const totalPrice = document.getElementById('totalPriceDisplay').innerText;
+
+            const shopName = document.getElementById('shopName').value;
+            const shopAddress = document.getElementById('shopAddress').value;
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ur-PK') + ' ' + now.toLocaleTimeString('ur-PK');
+
+            let subDesc = '';
+            switch (rateType) {
+                case 'rattiPerMasha': subDesc = `${rateAmount} رتی فی ماشہ`; break;
+                case 'rattiPerTola': subDesc = `${rateAmount} رتی فی تولہ`; break;
+                case 'mashaPerTola': subDesc = `${rateAmount} ماشہ فی تولہ`; break;
+                case 'tolaPer100Tola': subDesc = `${rateAmount} تولہ فی 100 تولہ`; break;
+            }
+
+            const receiptHTML = `
+                <div class="receipt">
+                    <h3>صرافہ وزن پرچی</h3>
+                    <div class="shop-info">${shopName}، ${shopAddress}</div>
+                    <table>
+                        <tr><td class="label">زمرہ</td><td>${categoryDisplay}</td></tr>
+                        <tr><td class="label">کل وزن</td><td>${wtT} تولہ ${wtM} ماشہ ${wtR} رتی (${grams} گرام)</td></tr>
+                        <tr><td class="label">کٹوتی کی قسم</td><td>${subDesc}</td></tr>
+                        <tr><td class="label">کُل کٹوتی</td><td>${totalCut}</td></tr>
+                        <tr><td class="label">خالص وزن</td><td>${netDisplay}</td></tr>
+                        <tr><td class="label">فی تولہ ریٹ</td><td>${ratePerTola} روپے</td></tr>
+                        <tr><td class="label">کل قیمت</td><td>${totalPrice} روپے</td></tr>
+                        <tr><td class="label">تاریخ/وقت</td><td>${dateStr}</td></tr>
+                    </table>
+                    <div class="footer">اللہ تعالیٰ برکت عطا فرمائے</div>
+                </div>
+            `;
+
+            const container = document.getElementById('receiptContainer');
+            container.innerHTML = receiptHTML + receiptHTML; // دو پرچیاں
+        }
+
+        // Print function
+        window.printReceipt = function() {
+            preparePrintable();
+            window.print();
+        };
+
+        // Initialize
+        window.onload = function() {
+            toggleCustomCategory();
+            updateFromTMR(); // zeros everything
+        };
+    </script>
+</body>
+</html>
