@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صرافہ وزن پرچی (نگینہ گرام + پرنٹ فکس)</title>
+    <title>صرافہ وزن پرچی (کل اجرت سمیت)</title>
     <style>
-        /* عمومی اسٹائل (اسکرین کے لیے) */
+        /* وہی اسٹائل جو پچھلے جواب میں تھا (مختصراً) */
         body {
             font-family: 'Noto Naskh Arabic', 'Jameel Noori Nastaleeq', 'Urdu Typesetting', 'Tahoma', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #e9ecf2 100%);
@@ -14,7 +14,7 @@
             direction: rtl;
         }
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: auto;
             background: white;
             border-radius: 20px;
@@ -52,11 +52,6 @@
             background: #fefefe;
             transition: all 0.2s;
         }
-        input:focus, select:focus {
-            border-color: #c9a959;
-            box-shadow: 0 0 5px rgba(201,169,89,0.3);
-            outline: none;
-        }
         .row {
             display: flex;
             gap: 8px;
@@ -75,7 +70,6 @@
             margin-top: 12px;
             transition: background 0.3s, transform 0.1s;
             font-size: 17px;
-            letter-spacing: 1px;
         }
         button:hover {
             background: #2a4e72;
@@ -109,14 +103,6 @@
             background: #fefcf6;
             font-size: 14px;
             border-radius: 10px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .preview-receipt h4 {
-            color: #1e3c5c;
-            margin-top: 0;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #c9a959;
-            padding-bottom: 5px;
         }
         .checkbox-row {
             display: flex;
@@ -140,14 +126,47 @@
             font-weight: bold;
             color: #1e3c5c;
         }
-        .gram-display {
-            background: #e0e7ef;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 14px;
+        .print-note {
+            background: #fff3cd;
+            border: 2px solid #c9a959;
+            border-radius: 30px;
+            padding: 8px 15px;
+            margin: 15px 0 5px;
             text-align: center;
+            font-size: 16px;
+            color: #856404;
+        }
+        .charges-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .charges-row input {
+            flex: 1;
+        }
+        .charges-row button {
+            width: 40px;
+            background: #c0392b;
+            font-size: 16px;
+            padding: 8px;
+            margin-top: 0;
+        }
+        .add-button {
+            background: #27ae60;
+            width: auto;
+            padding: 8px 15px;
             margin-top: 5px;
-            border: 1px solid #b4945a;
+        }
+        .total-amount {
+            background: #d4edda;
+            color: #155724;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 30px;
+            border: 2px solid #28a745;
+            margin-top: 15px;
         }
 
         /* پرنٹ اسٹائل */
@@ -172,82 +191,81 @@
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 100%;
+                height: auto;
                 background: #f9f6f0;
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
-                overflow: hidden; /* کوئی اضافی سکرول نہ ہو */
             }
             .receipt-container {
-                display: flex;
-                flex-wrap: nowrap;
                 width: 100%;
-                height: 100%;
-                gap: 10px;
-                justify-content: center;
-                align-items: center;
-                padding: 5px;
+                height: auto;
+                overflow: hidden;
                 box-sizing: border-box;
+                padding: 5px;
             }
             .receipt {
                 width: 49%;
-                height: auto;
-                max-height: 100%;
+                float: left;
+                margin: 0 0.5%;
                 background: white;
                 border: 2px solid #b4945a;
-                border-radius: 30px;
-                padding: 15px 12px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
+                border-radius: 20px;
+                padding: 10px 8px;
+                box-sizing: border-box;
                 page-break-inside: avoid;
-                font-size: 14pt;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                page-break-after: avoid;
+                font-size: 11pt;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.15);
                 background: linear-gradient(165deg, #fffdf7 0%, #fff 100%);
                 position: relative;
                 overflow: hidden;
-                box-sizing: border-box;
             }
             .receipt::before {
                 content: "⚖️";
                 position: absolute;
-                top: -15px;
-                right: -15px;
-                font-size: 80px;
+                top: -10px;
+                right: -10px;
+                font-size: 60px;
                 opacity: 0.08;
                 transform: rotate(15deg);
                 pointer-events: none;
             }
             .shop-info {
                 text-align: center;
-                font-size: 16pt;
+                font-size: 14pt;
                 font-weight: bold;
                 color: #1e3c5c;
-                margin: 0 0 8px;
+                margin: 0 0 4px;
                 background: #e9e2d0;
-                padding: 5px 10px;
-                border-radius: 40px;
+                padding: 3px 6px;
+                border-radius: 30px;
                 border: 2px solid #c9a959;
+            }
+            .customer-name {
+                text-align: center;
+                font-size: 12pt;
+                color: #2a4e72;
+                margin-bottom: 4px;
             }
             .category-print {
                 text-align: center;
-                font-size: 14pt;
+                font-size: 12pt;
                 color: #2a4e72;
-                margin-bottom: 8px;
+                margin-bottom: 4px;
             }
             .weight-table {
                 width: 100%;
                 border-collapse: collapse;
-                margin: 5px 0;
-                font-size: 12pt;
+                margin: 2px 0;
+                font-size: 10pt;
                 background: white;
-                border-radius: 12px;
+                border-radius: 8px;
                 overflow: hidden;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             }
             .weight-table th, .weight-table td {
-                padding: 4px 2px;
+                padding: 2px 1px;
                 border: 1px solid #d4b68a;
                 text-align: center;
             }
@@ -256,37 +274,51 @@
                 color: #1e3c5c;
                 font-weight: bold;
             }
-            .weight-table td {
-                background: white;
-            }
             .row-label {
                 font-weight: bold;
                 background: #f3ede1;
                 width: 12%;
             }
-            .calculation-note {
-                margin: 3px 0;
-                padding: 3px;
-                background: #fcf8e7;
-                border-radius: 20px;
-                font-size: 11pt;
-                text-align: center;
-                border: 1px dashed #c9a959;
+            .charges-section {
+                margin-top: 6px;
+                border-top: 2px dashed #c9a959;
+                padding-top: 4px;
             }
-            .price-section {
+            .charges-item {
                 display: flex;
                 justify-content: space-between;
-                margin-top: 8px;
-                padding: 4px 8px;
-                background: #e9e2d0;
-                border-radius: 30px;
+                font-size: 10pt;
+                padding: 2px 0;
+            }
+            .charges-item .label {
+                font-weight: bold;
+                color: #1e3c5c;
+            }
+            .total-row {
+                margin-top: 5px;
+                padding: 4px;
+                background: #e9f7e1;
+                border: 2px solid #28a745;
+                border-radius: 20px;
+                text-align: center;
                 font-size: 13pt;
+                font-weight: bold;
+                color: #155724;
+            }
+            .calculation-note {
+                margin: 2px 0;
+                padding: 2px;
+                background: #fcf8e7;
+                border-radius: 15px;
+                font-size: 9pt;
+                text-align: center;
+                border: 1px dashed #c9a959;
             }
             .footer-date {
                 display: flex;
                 justify-content: space-between;
-                margin-top: 8px;
-                font-size: 11pt;
+                margin-top: 4px;
+                font-size: 9pt;
                 color: #2c3e50;
             }
         }
@@ -294,7 +326,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>⚖️ صرافہ وزن پرچی (نگینہ گرام + پرنٹ فکس)</h2>
+        <h2>⚖️ صرافہ وزن پرچی (کل اجرت سمیت)</h2>
 
         <!-- دکان دار کا نام و پتہ -->
         <div style="margin-bottom:15px; background:#fcf8e7; padding:10px; border-radius:10px; border:1px solid #c9a959;">
@@ -304,12 +336,18 @@
             <input type="text" id="shopAddress" value="صرافہ بازار ملتان" placeholder="پتہ">
         </div>
 
-        <!-- زمرہ + دستی نام -->
+        <!-- گاہک کا نام -->
+        <div style="margin-bottom:15px;">
+            <label>گاہک کا نام</label>
+            <input type="text" id="customerName" placeholder="نام گاہک">
+        </div>
+
+        <!-- زمرہ + دستی نام (چاندی بطور ڈیفالٹ) -->
         <div>
             <label>زمرہ</label>
             <select id="category" onchange="toggleCustomCategory()">
-		<option value="چاندی">چاندی</option>
                 <option value="سونا">سونا</option>
+                <option value="چاندی" selected>چاندی</option>
                 <option value="انگوٹھی">انگوٹھی</option>
                 <option value="سیٹ">سیٹ</option>
                 <option value="زیور">زیور</option>
@@ -334,8 +372,19 @@
             <div><input type="number" id="wtRatti" step="any" value="0" min="0" placeholder="رتی" oninput="updateFromTMR()"></div>
         </div>
 
-        <!-- تناسب والی کٹوتی -->
-        <div class="section-title">📉 کاٹ (تناسب والی)</div>
+        <!-- نگینہ کی کاٹ (gemstone deduction) -->
+        <div class="section-title">💎 نگینہ کی کاٹ (فکس)</div>
+        <label>نگینہ (تولہ، ماشہ، رتی) — اگر نہ ہو تو 0 رکھیں</label>
+        <div class="row">
+            <div><input type="number" id="gemTola" step="any" value="0" min="0" placeholder="تولہ" oninput="updateGemFromTMR()"></div>
+            <div><input type="number" id="gemMasha" step="any" value="0" min="0" placeholder="ماشہ" oninput="updateGemFromTMR()"></div>
+            <div><input type="number" id="gemRatti" step="any" value="0" min="0" placeholder="رتی" oninput="updateGemFromTMR()"></div>
+        </div>
+        <label>نگینہ (گرام میں) — متبادل</label>
+        <input type="number" id="gemGrams" step="any" value="0" min="0" placeholder="مثلاً 2.5" oninput="updateGemFromGrams()">
+
+        <!-- ملاوٹ کی کاٹ (alloy deduction) - proportional cut -->
+        <div class="section-title">🔨 ملاوٹ کی کاٹ (تناسب والی)</div>
         <label>کاٹ کی قسم</label>
         <select id="rateType" onchange="calculateNet()">
             <option value="rattiPerMasha">🔹 رتی فی ماشہ</option>
@@ -347,43 +396,65 @@
         <label>مقدار (مثلاً 1، 2، 0.5)</label>
         <input type="number" id="rateAmount" step="any" value="0" min="0" oninput="calculateNet()">
 
-        <!-- فکس کٹوتی (نگینہ) -->
-        <div class="section-title">💎 نگینہ (فکس کاٹ)</div>
-        <label>نگینہ (تولہ، ماشہ، رتی) — اگر نہ ہو تو 0 رکھیں</label>
-        <div class="row">
-            <div><input type="number" id="fixedTola" step="any" value="0" min="0" placeholder="تولہ" oninput="updateFixedFromTMR()"></div>
-            <div><input type="number" id="fixedMasha" step="any" value="0" min="0" placeholder="ماشہ" oninput="updateFixedFromTMR()"></div>
-            <div><input type="number" id="fixedRatti" step="any" value="0" min="0" placeholder="رتی" oninput="updateFixedFromTMR()"></div>
-        </div>
-
-        <label>نگینہ (گرام میں) — متبادل</label>
-        <input type="number" id="fixedGrams" step="any" value="0" min="0" placeholder="مثلاً 2.5" oninput="updateFixedFromGrams()">
-
-        <!-- کل کٹوتی (خودکار) -->
-        <label>کُل کٹوتی (تناسب + نگینہ)</label>
-        <div class="readonly-item" id="totalCutDisplay">0 تولہ 0 ماشہ 0.00 رتی (0.00 گرام)</div>
-
         <!-- خالص وزن (خودکار) -->
-        <label>خالص وزن</label>
+        <label>خالص وزن (بعد از دونوں کاٹ)</label>
         <div class="readonly-item" id="netDisplay">0 تولہ 0 ماشہ 0.00 رتی (0.00 گرام)</div>
 
         <!-- فی تولہ ریٹ -->
         <label>فی تولہ ریٹ (روپے)</label>
-        <input type="number" id="ratePerTola" step="any" value="0" min="0" placeholder="مثلاً 120000" oninput="calculateNet()">
+        <input type="number" id="ratePerTola" step="any" value="0" min="0" placeholder="مثلاً 120000" oninput="calculateTotal()">
 
-        <!-- کل قیمت -->
-        <label>کل قیمت (روپے)</label>
-        <div class="readonly-item" id="totalPriceDisplay">0.00</div>
+        <!-- اجرت کا سیکشن -->
+        <div class="section-title">💰 اجرت</div>
 
-        <!-- چیک باکس: پرنٹ میں کل قیمت دکھائیں یا نہیں -->
-        <div class="checkbox-row">
-            <input type="checkbox" id="showPriceCheckbox" checked>
-            <label>پرنٹ میں کل قیمت دکھائیں</label>
+        <div class="row">
+            <div>
+                <label>نگ کی قیمت</label>
+                <input type="number" id="chargeGemPrice" step="any" value="0" min="0" oninput="calculateTotal()">
+            </div>
+            <div>
+                <label>جڑائی کی اجرت</label>
+                <input type="number" id="chargeSetting" step="any" value="0" min="0" oninput="calculateTotal()">
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label>روڈیم</label>
+                <input type="number" id="chargeRhodium" step="any" value="0" min="0" oninput="calculateTotal()">
+            </div>
+            <div>
+                <label>پالش</label>
+                <input type="number" id="chargePolish" step="any" value="0" min="0" oninput="calculateTotal()">
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label>نگ/ڈبہ/موتی</label>
+                <input type="number" id="chargeGemBox" step="any" value="0" min="0" oninput="calculateTotal()">
+            </div>
+            <div>
+                <label>دیگر (عنوان)</label>
+                <input type="text" id="otherTitle" placeholder="مثلاً ڈیزائن" oninput="calculateTotal()">
+            </div>
+        </div>
+
+        <!-- ڈائنامک دیگر اجرت -->
+        <div id="otherChargesContainer"></div>
+        <button class="add-button" onclick="addOtherCharge()">➕ دیگر اجرت شامل کریں</button>
+
+        <!-- کل رقم (قیمت + اجرت) -->
+        <div class="total-amount" id="totalAmountDisplay">
+            کل رقم (قیمت + اجرت): 0.00 روپے
+        </div>
+
+        <!-- پرنٹ نوٹ -->
+        <div class="print-note">
+            💡 پرنٹ ڈائیلاگ میں <strong>Scale 133%</strong> اور <strong>Margins None</strong> منتخب کریں۔
         </div>
 
         <!-- بٹنوں کی قطار -->
         <div style="display: flex; gap: 10px;">
-            <button onclick="printReceipt()" style="flex: 2;">🖨️ خوبصورت پرنٹ کریں (دو پرچیاں)</button>
+            <button onclick="printReceipt()" style="flex: 2;">🖨️ پرنٹ کریں (دو پرچیاں)</button>
             <button onclick="resetAll()" style="flex: 1; background: #c9a959;">🔄 ری سیٹ کریں</button>
         </div>
 
@@ -407,14 +478,17 @@
         const EPS = 1e-6;
 
         let isUpdating = false;
-        let isUpdatingFixed = false; // نگینہ کے لیے علیحدہ
+        let isUpdatingGem = false;
         let grossRatti = 0;
-        let proportionalCutRatti = 0;
-        let fixedCutRatti = 0;
-        let totalCutRatti = 0;
+        let gemCutRatti = 0;          // نگینہ کی کاٹ
+        let weightAfterGem = 0;        // وزن بعد از نگینہ
+        let alloyCutRatti = 0;         // ملاوٹ کی کاٹ (proportional)
         let netRatti = 0;
         let rateTypeText = '';
         let rateAmount = 0;
+
+        // Array to store additional other charges
+        let otherCharges = [];
 
         // Conversion functions
         function tmrToRatti(tola, masha, ratti) {
@@ -447,36 +521,36 @@
             return { kg, g, mg };
         }
 
-        // نگینہ کے TMR سے گرام اپ ڈیٹ
-        function updateFixedFromTMR() {
-            if (isUpdatingFixed) return;
-            isUpdatingFixed = true;
+        // Gem cut update from TMR
+        function updateGemFromTMR() {
+            if (isUpdatingGem) return;
+            isUpdatingGem = true;
 
-            const fixedT = parseFloat(document.getElementById('fixedTola').value) || 0;
-            const fixedM = parseFloat(document.getElementById('fixedMasha').value) || 0;
-            const fixedR = parseFloat(document.getElementById('fixedRatti').value) || 0;
-            const fixedRattiTotal = tmrToRatti(fixedT, fixedM, fixedR);
-            const fixedGrams = fixedRattiTotal * GRAM_PER_RATTI;
-            document.getElementById('fixedGrams').value = fixedGrams.toFixed(2);
+            const gemT = parseFloat(document.getElementById('gemTola').value) || 0;
+            const gemM = parseFloat(document.getElementById('gemMasha').value) || 0;
+            const gemR = parseFloat(document.getElementById('gemRatti').value) || 0;
+            const gemRattiTotal = tmrToRatti(gemT, gemM, gemR);
+            const gemGrams = gemRattiTotal * GRAM_PER_RATTI;
+            document.getElementById('gemGrams').value = gemGrams.toFixed(2);
 
-            isUpdatingFixed = false;
-            calculateNet(); // باقی حساب
+            isUpdatingGem = false;
+            calculateNet();
         }
 
-        // نگینہ کے گرام سے TMR اپ ڈیٹ
-        function updateFixedFromGrams() {
-            if (isUpdatingFixed) return;
-            isUpdatingFixed = true;
+        // Gem cut update from grams
+        function updateGemFromGrams() {
+            if (isUpdatingGem) return;
+            isUpdatingGem = true;
 
-            const fixedGrams = parseFloat(document.getElementById('fixedGrams').value) || 0;
-            const fixedRattiTotal = fixedGrams / GRAM_PER_RATTI;
-            const tmr = rattiToTMR(fixedRattiTotal);
+            const gemGrams = parseFloat(document.getElementById('gemGrams').value) || 0;
+            const gemRattiTotal = gemGrams / GRAM_PER_RATTI;
+            const tmr = rattiToTMR(gemRattiTotal);
 
-            document.getElementById('fixedTola').value = tmr.tola;
-            document.getElementById('fixedMasha').value = tmr.masha;
-            document.getElementById('fixedRatti').value = tmr.ratti.toFixed(2);
+            document.getElementById('gemTola').value = tmr.tola;
+            document.getElementById('gemMasha').value = tmr.masha;
+            document.getElementById('gemRatti').value = tmr.ratti.toFixed(2);
 
-            isUpdatingFixed = false;
+            isUpdatingGem = false;
             calculateNet();
         }
 
@@ -533,6 +607,49 @@
             calculateNet();
         };
 
+        // Add new other charge field
+        window.addOtherCharge = function() {
+            const container = document.getElementById('otherChargesContainer');
+            const index = otherCharges.length;
+            const div = document.createElement('div');
+            div.className = 'charges-row';
+            div.id = `other-${index}`;
+            div.innerHTML = `
+                <input type="text" placeholder="عنوان (مثلاً ڈیزائن)" onchange="updateOtherTitle(${index}, this.value)">
+                <input type="number" step="any" value="0" min="0" placeholder="رقم" onchange="updateOtherAmount(${index}, this.value)">
+                <button onclick="removeOtherCharge(${index})">✖</button>
+            `;
+            container.appendChild(div);
+            otherCharges.push({ title: '', amount: 0 });
+        };
+
+        window.updateOtherTitle = function(index, value) {
+            otherCharges[index].title = value;
+            calculateTotal();
+        };
+
+        window.updateOtherAmount = function(index, value) {
+            otherCharges[index].amount = parseFloat(value) || 0;
+            calculateTotal();
+        };
+
+        window.removeOtherCharge = function(index) {
+            const container = document.getElementById('otherChargesContainer');
+            const div = document.getElementById(`other-${index}`);
+            container.removeChild(div);
+            otherCharges.splice(index, 1);
+            // Re-index remaining
+            const rows = container.children;
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].id = `other-${i}`;
+                const inputs = rows[i].getElementsByTagName('input');
+                inputs[0].onchange = function() { updateOtherTitle(i, inputs[0].value); };
+                inputs[1].onchange = function() { updateOtherAmount(i, inputs[1].value); };
+                rows[i].querySelector('button').onclick = function() { removeOtherCharge(i); };
+            }
+            calculateTotal();
+        };
+
         window.calculateNet = function() {
             // Gross weight
             const wtT = parseFloat(document.getElementById('wtTola').value) || 0;
@@ -540,11 +657,20 @@
             const wtR = parseFloat(document.getElementById('wtRatti').value) || 0;
             grossRatti = tmrToRatti(wtT, wtM, wtR);
 
-            // Proportional cut
+            // Gem cut
+            const gemT = parseFloat(document.getElementById('gemTola').value) || 0;
+            const gemM = parseFloat(document.getElementById('gemMasha').value) || 0;
+            const gemR = parseFloat(document.getElementById('gemRatti').value) || 0;
+            gemCutRatti = tmrToRatti(gemT, gemM, gemR);
+
+            // Weight after gem deduction
+            weightAfterGem = grossRatti - gemCutRatti;
+            if (weightAfterGem < 0) weightAfterGem = 0;
+
+            // Alloy cut (proportional) on weightAfterGem
             const rateType = document.getElementById('rateType').value;
             rateAmount = parseFloat(document.getElementById('rateAmount').value) || 0;
 
-            // Store text for display
             switch (rateType) {
                 case 'rattiPerMasha': rateTypeText = `${rateAmount} رتی فی ماشہ`; break;
                 case 'rattiPerTola': rateTypeText = `${rateAmount} رتی فی تولہ`; break;
@@ -553,38 +679,27 @@
                 default: rateTypeText = '';
             }
 
-            proportionalCutRatti = 0;
-            if (rateType === 'rattiPerMasha') {
-                const totalMasha = grossRatti / 8;
-                proportionalCutRatti = rateAmount * totalMasha;
-            } else if (rateType === 'rattiPerTola') {
-                const totalTola = grossRatti / 96;
-                proportionalCutRatti = rateAmount * totalTola;
-            } else if (rateType === 'mashaPerTola') {
-                const totalTola = grossRatti / 96;
-                const subtractMasha = rateAmount * totalTola;
-                proportionalCutRatti = subtractMasha * 8;
-            } else if (rateType === 'tolaPer100Tola') {
-                const totalTola = grossRatti / 96;
-                const subtractTola = (rateAmount / 100) * totalTola;
-                proportionalCutRatti = subtractTola * 96;
+            alloyCutRatti = 0;
+            if (weightAfterGem > 0) {
+                if (rateType === 'rattiPerMasha') {
+                    const totalMasha = weightAfterGem / 8;
+                    alloyCutRatti = rateAmount * totalMasha;
+                } else if (rateType === 'rattiPerTola') {
+                    const totalTola = weightAfterGem / 96;
+                    alloyCutRatti = rateAmount * totalTola;
+                } else if (rateType === 'mashaPerTola') {
+                    const totalTola = weightAfterGem / 96;
+                    const subtractMasha = rateAmount * totalTola;
+                    alloyCutRatti = subtractMasha * 8;
+                } else if (rateType === 'tolaPer100Tola') {
+                    const totalTola = weightAfterGem / 96;
+                    const subtractTola = (rateAmount / 100) * totalTola;
+                    alloyCutRatti = subtractTola * 96;
+                }
             }
 
-            // Fixed cut
-            const fixedT = parseFloat(document.getElementById('fixedTola').value) || 0;
-            const fixedM = parseFloat(document.getElementById('fixedMasha').value) || 0;
-            const fixedR = parseFloat(document.getElementById('fixedRatti').value) || 0;
-            fixedCutRatti = tmrToRatti(fixedT, fixedM, fixedR);
-
-            // Total cut and net
-            totalCutRatti = proportionalCutRatti + fixedCutRatti;
-            netRatti = grossRatti - totalCutRatti;
-
-            // Display total cut
-            const cutTMR = rattiToTMR(totalCutRatti);
-            const cutGrams = totalCutRatti * GRAM_PER_RATTI;
-            document.getElementById('totalCutDisplay').innerText = 
-                `${cutTMR.tola} تولہ ${cutTMR.masha} ماشہ ${cutTMR.ratti.toFixed(2)} رتی (${cutGrams.toFixed(2)} گرام)`;
+            netRatti = weightAfterGem - alloyCutRatti;
+            if (netRatti < 0) netRatti = 0;
 
             // Display net weight
             const netTMR = rattiToTMR(netRatti);
@@ -592,15 +707,31 @@
             document.getElementById('netDisplay').innerText = 
                 `${netTMR.tola} تولہ ${netTMR.masha} ماشہ ${netTMR.ratti.toFixed(2)} رتی (${netGrams.toFixed(2)} گرام)`;
 
-            // Total price
-            const netTolaDecimal = rattiToDecimalTola(netRatti);
-            const ratePerTola = parseFloat(document.getElementById('ratePerTola').value) || 0;
-            const totalPrice = netTolaDecimal * ratePerTola;
-            document.getElementById('totalPriceDisplay').innerText = totalPrice.toFixed(2);
-
-            // Update preview
+            calculateTotal();
             updatePreview();
         };
+
+        function calculateTotal() {
+            const netTolaDecimal = rattiToDecimalTola(netRatti);
+            const ratePerTola = parseFloat(document.getElementById('ratePerTola').value) || 0;
+            const metalValue = netTolaDecimal * ratePerTola;
+
+            // Sum all charges
+            const chargeGemPrice = parseFloat(document.getElementById('chargeGemPrice').value) || 0;
+            const chargeSetting = parseFloat(document.getElementById('chargeSetting').value) || 0;
+            const chargeRhodium = parseFloat(document.getElementById('chargeRhodium').value) || 0;
+            const chargePolish = parseFloat(document.getElementById('chargePolish').value) || 0;
+            const chargeGemBox = parseFloat(document.getElementById('chargeGemBox').value) || 0;
+
+            let otherTotal = 0;
+            otherCharges.forEach(item => { otherTotal += item.amount; });
+
+            const totalCharges = chargeGemPrice + chargeSetting + chargeRhodium + chargePolish + chargeGemBox + otherTotal;
+            const grandTotal = metalValue + totalCharges;
+
+            document.getElementById('totalAmountDisplay').innerText = 
+                `کل رقم (قیمت + اجرت): ${grandTotal.toFixed(2)} روپے`;
+        }
 
         function updatePreview() {
             const categoryDisplay = getCurrentCategory();
@@ -609,28 +740,26 @@
             const wtR = document.getElementById('wtRatti').value || '0';
             const grams = document.getElementById('gramsInput').value || '0';
             const ratePerTola = document.getElementById('ratePerTola').value || '0';
-            const totalCut = document.getElementById('totalCutDisplay').innerText;
             const netDisplay = document.getElementById('netDisplay').innerText;
-            const totalPrice = document.getElementById('totalPriceDisplay').innerText;
-
+            const totalAmount = document.getElementById('totalAmountDisplay').innerText;
             const now = new Date();
             const dateStr = now.toLocaleDateString('ur-PK') + ' ' + now.toLocaleTimeString('ur-PK');
 
             document.getElementById('previewContent').innerHTML = `
                 <table style="width:100%; border-collapse:collapse; direction:rtl;">
+                    <tr><td class="label">گاہک</td><td>${document.getElementById('customerName').value || '---'}</td></tr>
                     <tr><td class="label">زمرہ</td><td>${categoryDisplay}</td></tr>
                     <tr><td class="label">کل وزن</td><td>${wtT} تولہ ${wtM} ماشہ ${wtR} رتی (${grams} گرام)</td></tr>
                     <tr><td class="label">کاٹ کی قسم</td><td>${rateTypeText || 'کوئی نہیں'}</td></tr>
-                    <tr><td class="label">کُل کٹوتی</td><td>${totalCut}</td></tr>
                     <tr><td class="label">خالص وزن</td><td>${netDisplay}</td></tr>
                     <tr><td class="label">فی تولہ ریٹ</td><td>${ratePerTola} روپے</td></tr>
-                    <tr><td class="label">کل قیمت</td><td>${totalPrice} روپے</td></tr>
+                    <tr><td class="label">${totalAmount}</td><td></td></tr>
                     <tr><td class="label">تاریخ/وقت</td><td>${dateStr}</td></tr>
                 </table>
             `;
         }
 
-        // Prepare printable receipts with always four rows
+        // Prepare printable receipts with new order and columns
         function preparePrintable() {
             // Gross weight
             const wtT = document.getElementById('wtTola').value || '0';
@@ -639,97 +768,137 @@
             const grossGrams = grossRatti * GRAM_PER_RATTI;
             const grossSplit = splitGrams(grossGrams);
             
-            // Proportional cut (کاٹ)
-            const propTMR = rattiToTMR(proportionalCutRatti);
-            const propGrams = proportionalCutRatti * GRAM_PER_RATTI;
-            const propSplit = splitGrams(propGrams);
+            // Gem cut
+            const gemTMR = rattiToTMR(gemCutRatti);
+            const gemGrams = gemCutRatti * GRAM_PER_RATTI;
+            const gemSplit = splitGrams(gemGrams);
             
-            // Fixed cut (نگینہ)
-            const fixedTMR = rattiToTMR(fixedCutRatti);
-            const fixedGrams = fixedCutRatti * GRAM_PER_RATTI;
-            const fixedSplit = splitGrams(fixedGrams);
+            // Alloy cut
+            const alloyTMR = rattiToTMR(alloyCutRatti);
+            const alloyGrams = alloyCutRatti * GRAM_PER_RATTI;
+            const alloySplit = splitGrams(alloyGrams);
             
-            // Net weight (خالص)
+            // Net weight
             const netTMR = rattiToTMR(netRatti);
             const netGrams = netRatti * GRAM_PER_RATTI;
             const netSplit = splitGrams(netGrams);
             
-            // Price
-            const showPrice = document.getElementById('showPriceCheckbox').checked;
-            const ratePerTola = document.getElementById('ratePerTola').value || '0';
-            const totalPrice = document.getElementById('totalPriceDisplay').innerText;
-
+            // Shop info
             const shopName = document.getElementById('shopName').value;
             const shopAddress = document.getElementById('shopAddress').value;
             const fullShop = shopName + ' ' + shopAddress;
+            const customerName = document.getElementById('customerName').value || '______';
             const categoryDisplay = getCurrentCategory();
 
             const now = new Date();
             const dateStr = now.toLocaleDateString('ur-PK');
 
-            const hasProportional = proportionalCutRatti > EPS;
-            const hasFixed = fixedCutRatti > EPS;
-            const hasAnyCut = hasProportional || hasFixed;
+            const hasGem = gemCutRatti > EPS;
+            const hasAlloy = alloyCutRatti > EPS;
+            const hasAnyCut = hasGem || hasAlloy;
 
-            // Always show all four rows
+            // Build table rows in new order: وزن, نگینہ, ملاوٹ, خالص
             const tableRows = `
                 <tr>
                     <td class="row-label">وزن</td>
-                    <td>${wtT}</td>
-                    <td>${wtM}</td>
                     <td>${parseFloat(wtR).toFixed(2)}</td>
-                    <td>${grossSplit.kg}</td>
-                    <td>${grossSplit.g}</td>
+                    <td>${wtM}</td>
+                    <td>${wtT}</td>
                     <td>${grossSplit.mg}</td>
-                </tr>
-                <tr>
-                    <td class="row-label">کاٹ</td>
-                    <td>${hasProportional ? propTMR.tola : ''}</td>
-                    <td>${hasProportional ? propTMR.masha : ''}</td>
-                    <td>${hasProportional ? propTMR.ratti.toFixed(2) : ''}</td>
-                    <td>${hasProportional ? propSplit.kg : ''}</td>
-                    <td>${hasProportional ? propSplit.g : ''}</td>
-                    <td>${hasProportional ? propSplit.mg : ''}</td>
+                    <td>${grossSplit.g}</td>
+                    <td>${grossSplit.kg}</td>
                 </tr>
                 <tr>
                     <td class="row-label">نگینہ</td>
-                    <td>${hasFixed ? fixedTMR.tola : ''}</td>
-                    <td>${hasFixed ? fixedTMR.masha : ''}</td>
-                    <td>${hasFixed ? fixedTMR.ratti.toFixed(2) : ''}</td>
-                    <td>${hasFixed ? fixedSplit.kg : ''}</td>
-                    <td>${hasFixed ? fixedSplit.g : ''}</td>
-                    <td>${hasFixed ? fixedSplit.mg : ''}</td>
+                    <td>${hasGem ? gemTMR.ratti.toFixed(2) : ''}</td>
+                    <td>${hasGem ? gemTMR.masha : ''}</td>
+                    <td>${hasGem ? gemTMR.tola : ''}</td>
+                    <td>${hasGem ? gemSplit.mg : ''}</td>
+                    <td>${hasGem ? gemSplit.g : ''}</td>
+                    <td>${hasGem ? gemSplit.kg : ''}</td>
+                </tr>
+                <tr>
+                    <td class="row-label">ملاوٹ</td>
+                    <td>${hasAlloy ? alloyTMR.ratti.toFixed(2) : ''}</td>
+                    <td>${hasAlloy ? alloyTMR.masha : ''}</td>
+                    <td>${hasAlloy ? alloyTMR.tola : ''}</td>
+                    <td>${hasAlloy ? alloySplit.mg : ''}</td>
+                    <td>${hasAlloy ? alloySplit.g : ''}</td>
+                    <td>${hasAlloy ? alloySplit.kg : ''}</td>
                 </tr>
                 <tr>
                     <td class="row-label">خالص</td>
-                    <td>${hasAnyCut ? netTMR.tola : ''}</td>
-                    <td>${hasAnyCut ? netTMR.masha : ''}</td>
                     <td>${hasAnyCut ? netTMR.ratti.toFixed(2) : ''}</td>
-                    <td>${hasAnyCut ? netSplit.kg : ''}</td>
-                    <td>${hasAnyCut ? netSplit.g : ''}</td>
+                    <td>${hasAnyCut ? netTMR.masha : ''}</td>
+                    <td>${hasAnyCut ? netTMR.tola : ''}</td>
                     <td>${hasAnyCut ? netSplit.mg : ''}</td>
+                    <td>${hasAnyCut ? netSplit.g : ''}</td>
+                    <td>${hasAnyCut ? netSplit.kg : ''}</td>
                 </tr>
             `;
 
-            // Calculation note for proportional cut (only if it exists)
-            const calcNote = (hasProportional && rateTypeText) ? 
-                `<div class="calculation-note">کاٹ کا حساب: ${rateTypeText}</div>` : '';
+            // Calculation note for alloy cut
+            const calcNote = (hasAlloy && rateTypeText) ? 
+                `<div class="calculation-note">ملاوٹ کا حساب: ${rateTypeText}</div>` : '';
+
+            // Charges
+            const chargeGemPrice = parseFloat(document.getElementById('chargeGemPrice').value) || 0;
+            const chargeSetting = parseFloat(document.getElementById('chargeSetting').value) || 0;
+            const chargeRhodium = parseFloat(document.getElementById('chargeRhodium').value) || 0;
+            const chargePolish = parseFloat(document.getElementById('chargePolish').value) || 0;
+            const chargeGemBox = parseFloat(document.getElementById('chargeGemBox').value) || 0;
+
+            let chargesHTML = '';
+            if (chargeGemPrice > 0) chargesHTML += `<div class="charges-item"><span class="label">نگ کی قیمت:</span> <span>${chargeGemPrice} روپے</span></div>`;
+            if (chargeSetting > 0) chargesHTML += `<div class="charges-item"><span class="label">جڑائی کی اجرت:</span> <span>${chargeSetting} روپے</span></div>`;
+            if (chargeRhodium > 0) chargesHTML += `<div class="charges-item"><span class="label">روڈیم:</span> <span>${chargeRhodium} روپے</span></div>`;
+            if (chargePolish > 0) chargesHTML += `<div class="charges-item"><span class="label">پالش:</span> <span>${chargePolish} روپے</span></div>`;
+            if (chargeGemBox > 0) chargesHTML += `<div class="charges-item"><span class="label">نگ/ڈبہ/موتی:</span> <span>${chargeGemBox} روپے</span></div>`;
+            
+            // Dynamic other charges
+            otherCharges.forEach(item => {
+                if (item.title && item.amount > 0) {
+                    chargesHTML += `<div class="charges-item"><span class="label">${item.title}:</span> <span>${item.amount} روپے</span></div>`;
+                }
+            });
+
+            // Calculate totals
+            let otherTotal = 0;
+            otherCharges.forEach(item => { otherTotal += item.amount; });
+            const totalCharges = chargeGemPrice + chargeSetting + chargeRhodium + chargePolish + chargeGemBox + otherTotal;
+            const netTolaDecimal = rattiToDecimalTola(netRatti);
+            const ratePerTola = parseFloat(document.getElementById('ratePerTola').value) || 0;
+            const metalValue = netTolaDecimal * ratePerTola;
+            const grandTotal = metalValue + totalCharges;
+
+            // Add total charges line (after all individual charges)
+            const totalChargesLine = `<div class="charges-item" style="border-top: 1px dashed #d4b68a; margin-top: 2px; padding-top: 2px;"><span class="label">کل اجرت:</span> <span>${totalCharges.toFixed(2)} روپے</span></div>`;
+
+            const totalHTML = `
+                <div class="charges-section">
+                    ${chargesHTML}
+                    ${totalChargesLine}
+                    <div class="charges-item"><span class="label">کل ${categoryDisplay} کی قیمت:</span> <span>${metalValue.toFixed(2)} روپے</span></div>
+                    <div class="total-row">کل رقم: ${grandTotal.toFixed(2)} روپے</div>
+                </div>
+            `;
 
             const receiptHTML = `
                 <div class="receipt">
                     <div class="shop-info">${fullShop}</div>
+                    <div class="customer-name">گاہک: ${customerName}</div>
                     <div class="category-print">زمرہ: ${categoryDisplay}</div>
                     
                     <table class="weight-table">
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>تولہ</th>
-                                <th>ماشہ</th>
                                 <th>رتی</th>
-                                <th>کلو</th>
-                                <th>گرام</th>
+                                <th>ماشہ</th>
+                                <th>تولہ</th>
                                 <th>ملی</th>
+                                <th>گرام</th>
+                                <th>کلو</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -738,11 +907,7 @@
                     </table>
 
                     ${calcNote}
-
-                    <div class="price-section">
-                        <span>فی تولہ: ${ratePerTola} روپے</span>
-                        ${showPrice ? `<span>کل قیمت: ${totalPrice} روپے</span>` : ''}
-                    </div>
+                    ${totalHTML}
 
                     <div class="footer-date">
                         <span>تاریخ: ${dateStr}</span>
@@ -760,31 +925,39 @@
             window.print();
         };
 
-        // ری سیٹ فنکشن
         window.resetAll = function() {
             document.getElementById('gramsInput').value = '0';
             document.getElementById('wtTola').value = '0';
             document.getElementById('wtMasha').value = '0';
             document.getElementById('wtRatti').value = '0';
+            document.getElementById('gemTola').value = '0';
+            document.getElementById('gemMasha').value = '0';
+            document.getElementById('gemRatti').value = '0';
+            document.getElementById('gemGrams').value = '0';
             document.getElementById('rateAmount').value = '0';
-            document.getElementById('fixedTola').value = '0';
-            document.getElementById('fixedMasha').value = '0';
-            document.getElementById('fixedRatti').value = '0';
-            document.getElementById('fixedGrams').value = '0';
             document.getElementById('ratePerTola').value = '0';
-            document.getElementById('category').value = 'چاندی';
-            document.getElementById('showPriceCheckbox').checked = true;
+            document.getElementById('customerName').value = '';
+            document.getElementById('category').value = 'چاندی'; // ڈیفالٹ چاندی
             document.getElementById('customCategoryDiv').classList.add('hidden');
             document.getElementById('customCategory').value = '';
+            document.getElementById('chargeGemPrice').value = '0';
+            document.getElementById('chargeSetting').value = '0';
+            document.getElementById('chargeRhodium').value = '0';
+            document.getElementById('chargePolish').value = '0';
+            document.getElementById('chargeGemBox').value = '0';
+            document.getElementById('otherTitle').value = '';
+            // Clear dynamic other charges
+            const container = document.getElementById('otherChargesContainer');
+            container.innerHTML = '';
+            otherCharges = [];
             
-            // حساب اپ ڈیٹ
             calculateNet();
         };
 
         window.onload = function() {
             toggleCustomCategory();
             updateFromTMR();
-            updateFixedFromTMR(); // نگینہ کے گرام کو ہم آہنگ کریں
+            updateGemFromTMR();
         };
     </script>
 </body>
